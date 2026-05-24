@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+option csharp_namespace = "Risk.Shared.Protos";
+
+package risk;
+
+service JogoRisk {
+  rpc Conectar (ConectarRequest) returns (ConectarResponse);
+  rpc TrocarCartas (TrocarCartasRequest) returns (TrocarCartasResponse);
+  rpc ObterEstado (ObterEstadoRequest) returns (ObterEstadoResponse);
+  rpc Atacar (AtacarRequest) returns (AtacarResponse);
+  rpc PassarTurno (PassarTurnoRequest) returns (PassarTurnoResponse);
+  rpc ReforcarPais (ReforcarPaisRequest) returns (ReforcarPaisResponse);
+}
+
+message ConectarRequest {
+  string nome_jogador = 1;
+}
+
+message ConectarResponse {
+  string jogador_id = 1;
+  bool sucesso = 2;
+  string mensagem = 3;
+}
+
+message ObterEstadoRequest {
+  string jogador_id = 1;
+}
+
+message ObterEstadoResponse {
+  string fase_atual = 1; 
+  string id_jogador_atual = 2; 
+  string nome_jogador_atual = 3;
+  repeated PaisDto paises = 4; 
+  repeated CartaDto suas_cartas = 5;
+  int32 tropas_livres = 6;
+}
+
+
+message PaisDto {
+  string nome = 1;
+  string nome_dono = 2;
+  int32 infantarias = 3;
+  int32 cavalarias = 4;
+}
+
+
+message AtacarRequest {
+  string jogador_id = 1; 
+  string pais_atacante = 2;
+  string pais_defensor = 3;
+  int32 qtd_tropas = 4;
+}
+
+message AtacarResponse {
+  bool sucesso = 1;
+  string mensagem = 2;
+  repeated int32 dados_ataque = 3; 
+  repeated int32 dados_defesa = 4;
+  bool conquistou = 5; 
+}
+
+
+message PassarTurnoRequest {
+  string jogador_id = 1;
+}
+
+message PassarTurnoResponse {
+  bool sucesso = 1;
+  string mensagem = 2;
+}
+
+
+message CartaDto {
+  string pais_nome = 1;
+  string tipo_tropa = 2; // "Infantaria" ou "Cavalaria"
+}
+
+
+message TrocarCartasRequest {
+  string jogador_id = 1;
+  repeated string paises_das_cartas = 2;
+}
+
+message TrocarCartasResponse {
+  bool sucesso = 1;
+  string mensagem = 2;
+  int32 tropas_recebidas = 3;
+}
+
+message ReforcarPaisRequest {
+  string jogador_id = 1;
+  string pais_nome = 2;
+  int32 quantidade = 3;
+}
+
+message ReforcarPaisResponse {
+  bool sucesso = 1;
+  string mensagem = 2;
+}
